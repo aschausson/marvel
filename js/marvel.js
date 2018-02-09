@@ -187,8 +187,9 @@ function leePersonajes(filtro) {
  */
 function muestraComic(comic) {
     var descripcionCorta = comic.description.substring(0, 60)
-    var path = comic.thumbnail.path.str.replace('http', 'https')
-    $('#contenedor').append('<div id="' + comic.id + '" class="comicPequeCont"><img src="' + path + '/' + 'portrait_medium.' + comic.thumbnail.extension + '"><h2>' + comic.title + '</h2><p>' + descripcionCorta + '...</p></div>')
+    var pathHttp = comic.thumbnail.path
+    var pathHttps = pathHttps.replace('http', 'https')
+    $('#contenedor').append('<div id="' + comic.id + '" class="comicPequeCont"><img src="' + pathHttps + '/' + 'portrait_medium.' + comic.thumbnail.extension + '"><h2>' + comic.title + '</h2><p>' + descripcionCorta + '...</p></div>')
 }
 
 /**
@@ -196,8 +197,9 @@ function muestraComic(comic) {
  * @param {*} personaje 
  */
 function muestraPersonaje(personaje) {
-    var path = personaje.thumbnail.path.str.replace('http', 'https')
-    $('#contenedorPersonajes').append('<div id="' + personaje.id + '" class="personajePequeCont"><img src="' + path + '/' + 'portrait_medium.' + personaje.thumbnail.extension + '"><h2>' + personaje.name + '</h2></div>')
+    var pathHttp = personaje.thumbnail.path
+    var pathHttps = pathHttps.replace('http', 'https')
+    $('#contenedorPersonajes').append('<div id="' + personaje.id + '" class="personajePequeCont"><img src="' + pathHttps + '/' + 'portrait_medium.' + personaje.thumbnail.extension + '"><h2>' + personaje.name + '</h2></div>')
 }
 
 /**
