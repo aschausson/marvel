@@ -1,6 +1,5 @@
 
 var votos = []
-var totalVotos = 0
 
 var comics = []
 var personajes = []
@@ -12,30 +11,31 @@ var data;
 var options;
 var optionsDonut;
 
+/**
+ * Cuando el documento está cargado, recoge los votos,los guarda en arrays, asigna listeners a los botones y muestra la gráfica de tipo pastel.
+ */
 $(document).ready(function () {
-	$('#divPersonajes').hide()
-	
-	$('#selectModo').change(function(){
-		$( "select option:selected").each(function() {
-			if ($(this).val() == "comics"){
-				$('#divComics').show()
-				$('#divPersonajes').hide()
-			}
-			if ($(this).val() == "personajes"){
-				$('#divPersonajes').show()
-				$('#divComics').hide()	
-			}
-		})
-	})	
-	
-    if (localStorage.getItem("votosMarvel") === null) {
+    $('#divPersonajes').hide()
 
+    $('#selectModo').change(function () {
+        $("select option:selected").each(function () {
+            if ($(this).val() == "comics") {
+                $('#divComics').show()
+                $('#divPersonajes').hide()
+            }
+            if ($(this).val() == "personajes") {
+                $('#divPersonajes').show()
+                $('#divComics').hide()
+            }
+        })
+    })
+
+    if (localStorage.getItem("votosMarvel") === null) {
+        alert('No existen votos guardados.')
     }
     else {
         votos = JSON.parse(localStorage.getItem("votosMarvel"))
     }
-
-
 
     for (let j = 0; j < votos.length; j++) {
         existeComic = false
@@ -67,13 +67,13 @@ $(document).ready(function () {
         }
     }
 
-    $('#botonTarta').click(function(){graficaPastel('')})
-    $('#botonColumna').click(function(){graficaColumna('')})
-    $('#botonDonut').click(function(){graficaDonut('')})
-	
-	$('#botonTartaP').click(function(){graficaPastel('P')})
-    $('#botonColumnaP').click(function(){graficaColumna('P')})
-    $('#botonDonutP').click(function(){graficaDonut('P')})
+    $('#botonTarta').click(function () { graficaPastel('') })
+    $('#botonColumna').click(function () { graficaColumna('') })
+    $('#botonDonut').click(function () { graficaDonut('') })
+
+    $('#botonTartaP').click(function () { graficaPastel('P') })
+    $('#botonColumnaP').click(function () { graficaColumna('P') })
+    $('#botonDonutP').click(function () { graficaDonut('P') })
 
     $('#atrasResultado, #atrasResultadoP').click(irAtras)
     $('#atrasResultado, #atrasResultadoP').keypress(function (e) {
@@ -84,15 +84,15 @@ $(document).ready(function () {
     graficaPastel('')
 })
 
-
 // Load the Visualization API and the corechart package.
 google.charts.load('current', { 'packages': ['corechart'] });
 
 // Set a callback to run when the Google Visualization API is loaded.
 google.charts.setOnLoadCallback(drawChart);
 
-// Callback that creates and populates a data table,
-// instantiates the pie chart, passes in the data and draws it.
+/**
+ * Callback that creates and populates a data table, instantiates the pie chart, passes in the data and draws it.
+ */
 function drawChart() {
     arrayComics = []
     for (let i = 0; i < comics.length; i++) {
@@ -102,7 +102,7 @@ function drawChart() {
 
     arrayPersonajes = []
     for (let i = 0; i < personajes.length; i++) {
-        subarray = [compersonajesics[i], votosPersonajes[i]]
+        subarray = [personajes[i], votosPersonajes[i]]
         arrayPersonajes.push(subarray)
     }
 
@@ -110,56 +110,120 @@ function drawChart() {
     $('#columna').show()
     $('#donut').show()
 
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Comic');
-        data.addColumn('number', 'Votos');
-        data.addRows(arrayComics);
-    
-        // Set chart options
-        var options = {
-            'title': 'Reparto de votos: Comics Marvel',
-            'width': $('.divGrafica').width() - 10,
-            'height': $('.divGrafica').height() - 30,
-            backgroundColor: '#f1f1f1',
-            is3D: true,
-            vAxis: { textPosition: 'in' },
-            chartArea: {
-                left: 0,
-                width: $('.divGrafica').width() - 10
-            },
-            legend: {
-                maxLines: 1,
-                textStyle: {
-                    fontSize: 15
-                }
-            },
-            titleTextStyle: {
-                fontSize: 20
+    setDataOptionsComic()
+    setDataOptionsPersonaje()
+
+    $('#columna').hide()
+    $('#donut').hide()
+
+    $('#pastel').find('#defs').remove()
+    $('#donut').find('#defs').remove()
+}
+
+
+/**
+ * Muestra la gráfica de tipo pastel y esconde las demás. Dependiendo del sufix, lo hace para cómics o personajes.
+ * @param {*} sufix 
+ */
+function graficaPastel(sufix) {
+    $('#botonTarta' + sufix).removeClass('botonesInactivo').addClass('botonesActivo')
+    $('#botonColumna' + sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+    $('#botonDonut' + sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+
+    $('#pastel' + sufix).show()
+    $('#columna' + sufix).hide()
+    $('#donut' + sufix).hide()
+}
+
+/**
+ * Muestra la gráfica de tipo columnas y esconde las demás. Dependiendo del sufix, lo hace para cómics o personajes.
+ * @param {*} sufix 
+ */
+function graficaColumna(sufix) {
+    $('#botonTarta' + sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+    $('#botonColumna' + sufix).removeClass('botonesInactivo').addClass('botonesActivo')
+    $('#botonDonut' + sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+
+    $('#pastel' + sufix).hide()
+    $('#columna' + sufix).show()
+    $('#donut' + sufix).hide()
+}
+
+/**
+ * Muestra la gráfica de tipo donut y esconde las demás. Dependiendo del sufix, lo hace para cómics o personajes.
+ * @param {*} sufix 
+ */
+function graficaDonut(sufix) {
+    $('#botonTarta' + sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+    $('#botonColumna' + sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+    $('#botonDonut' + sufix).removeClass('botonesInactivo').addClass('botonesActivo')
+
+    $('#pastel' + sufix).hide()
+    $('#columna' + sufix).hide()
+    $('#donut' + sufix).show()
+}
+
+/**
+ * Vuelve a la página principal.
+ */
+function irAtras() {
+    window.location.href = 'index.html'
+}
+
+/**
+ * Recopila los datos y las opciones para las gráficas de los cómics, las crea y las dibuja.
+ */
+function setDataOptionsComic() {
+    // Create the data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Comic');
+    data.addColumn('number', 'Votos');
+    data.addRows(arrayComics);
+
+    // Set chart options
+    var options = {
+        'title': 'Comics Marvel',
+        'width': $('.divGrafica').width() - 10,
+        'height': $('.divGrafica').height() - 30,
+        backgroundColor: '#f1f1f1',
+        is3D: true,
+        vAxis: { textPosition: 'in' },
+        chartArea: {
+            left: 0,
+            width: $('.divGrafica').width() - 10
+        },
+        legend: {
+            maxLines: 1,
+            textStyle: {
+                fontSize: 15
             }
+        },
+        titleTextStyle: {
+            fontSize: 20
         }
-    
-        var optionsDonut = {
-            'title': 'Reparto de votos: Comics Marvel',
-            'width': $('.divGrafica').width() - 10,
-            'height': $('.divGrafica').height() - 30,
-            backgroundColor: '#f1f1f1',
-            is3D: false,
-            pieHole: 0.3,
-            chartArea: {
-                left: 0,
-                width: $('.divGrafica').width() - 10
-            },
-            legend: {
-                maxLines: 1,
-                textStyle: {
-                    fontSize: 15
-                }
-            },
-            titleTextStyle: {
-                fontSize: 20
+    }
+
+    var optionsDonut = {
+        'title': 'Comics Marvel',
+        'width': $('.divGrafica').width() - 10,
+        'height': $('.divGrafica').height() - 30,
+        backgroundColor: '#f1f1f1',
+        is3D: false,
+        pieHole: 0.3,
+        chartArea: {
+            left: 0,
+            width: $('.divGrafica').width() - 10
+        },
+        legend: {
+            maxLines: 1,
+            textStyle: {
+                fontSize: 15
             }
+        },
+        titleTextStyle: {
+            fontSize: 20
         }
+    }
 
     // Instantiate and draw our chart, passing in some options.
     var chart = new google.visualization.PieChart(document.getElementById('pastel'));
@@ -170,166 +234,64 @@ function drawChart() {
 
     var chart = new google.visualization.PieChart(document.getElementById('donut'));
     chart.draw(data, optionsDonut);
-
-
-
-    setDataOptionsPersonaje()
-
-
-
-    $('#columna').hide()
-    $('#donut').hide()
-
-    $('#pastel').find('#defs').remove()
-    $('#donut').find('#defs').remove()
 }
 
+/**
+ * Recopila los datos y las opciones para las gráficas de los personajes, las crea y las dibuja.
+ */
+function setDataOptionsPersonaje() {
+    // Create the data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Personaje');
+    data.addColumn('number', 'Votos');
+    data.addRows(arrayPersonajes);
 
-
-function graficaPastel(sufix) {
-    $('#botonTarta'+sufix).removeClass('botonesInactivo').addClass('botonesActivo')
-    $('#botonColumna'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
-    $('#botonDonut'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
-
-    $('#pastel'+sufix).show()
-    $('#columna'+sufix).hide()
-    $('#donut'+sufix).hide()
-}
-
-
-function graficaColumna(sufix) {
-    $('#botonTarta'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
-    $('#botonColumna'+sufix).removeClass('botonesInactivo').addClass('botonesActivo')
-    $('#botonDonut'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
-
-    $('#pastel'+sufix).hide()
-    $('#columna'+sufix).show()
-    $('#donut'+sufix).hide()
-}
-
-
-function graficaDonut(sufix) {
-    $('#botonTarta'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
-    $('#botonColumna'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
-    $('#botonDonut'+sufix).removeClass('botonesInactivo').addClass('botonesActivo')
-
-    $('#pastel'+sufix).hide()
-    $('#columna'+sufix).hide()
-    $('#donut'+sufix).show()
-}
-
-function irAtras() {
-    window.location.href = 'index.html'
-}
-
-
-function setDataOptionsComic(){
-        // Create the data table.
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Comic');
-        data.addColumn('number', 'Votos');
-        data.addRows(arrayComics);
-    
-        // Set chart options
-        var options = {
-            'title': 'Reparto de votos: Comics Marvel',
-            'width': $('.divGrafica').width() - 10,
-            'height': $('.divGrafica').height() - 30,
-            backgroundColor: '#f1f1f1',
-            is3D: true,
-            vAxis: { textPosition: 'in' },
-            chartArea: {
-                left: 0,
-                width: $('.divGrafica').width() - 10
-            },
-            legend: {
-                maxLines: 1,
-                textStyle: {
-                    fontSize: 15
-                }
-            },
-            titleTextStyle: {
-                fontSize: 20
+    // Set chart options
+    var options = {
+        'title': 'Personajes Marvel',
+        'width': $('.divGrafica').width() - 10,
+        'height': $('.divGrafica').height() - 30,
+        backgroundColor: '#f1f1f1',
+        is3D: true,
+        vAxis: { textPosition: 'in' },
+        chartArea: {
+            left: 0,
+            width: $('.divGrafica').width() - 10
+        },
+        legend: {
+            maxLines: 1,
+            textStyle: {
+                fontSize: 15
             }
+        },
+        titleTextStyle: {
+            fontSize: 20
         }
-    
-        var optionsDonut = {
-            'title': 'Reparto de votos: Comics Marvel',
-            'width': $('.divGrafica').width() - 10,
-            'height': $('.divGrafica').height() - 30,
-            backgroundColor: '#f1f1f1',
-            is3D: false,
-            pieHole: 0.3,
-            chartArea: {
-                left: 0,
-                width: $('.divGrafica').width() - 10
-            },
-            legend: {
-                maxLines: 1,
-                textStyle: {
-                    fontSize: 15
-                }
-            },
-            titleTextStyle: {
-                fontSize: 20
+    }
+
+    var optionsDonut = {
+        'title': 'Personajes Marvel',
+        'width': $('.divGrafica').width() - 10,
+        'height': $('.divGrafica').height() - 30,
+        backgroundColor: '#f1f1f1',
+        is3D: false,
+        pieHole: 0.3,
+        chartArea: {
+            left: 0,
+            width: $('.divGrafica').width() - 10
+        },
+        legend: {
+            maxLines: 1,
+            textStyle: {
+                fontSize: 15
             }
+        },
+        titleTextStyle: {
+            fontSize: 20
         }
-}
+    }
 
-function setDataOptionsPersonaje(){
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Personaje');
-            data.addColumn('number', 'Votos');
-            data.addRows(arrayPersonajes);
-        
-            // Set chart options
-            var options = {
-                'title': 'Reparto de votos: Personajes Marvel',
-                'width': $('.divGrafica').width() - 10,
-                'height': $('.divGrafica').height() - 30,
-                backgroundColor: '#f1f1f1',
-                is3D: true,
-                vAxis: { textPosition: 'in' },
-                chartArea: {
-                    left: 0,
-                    width: $('.divGrafica').width() - 10
-                },
-                legend: {
-                    maxLines: 1,
-                    textStyle: {
-                        fontSize: 15
-                    }
-                },
-                titleTextStyle: {
-                    fontSize: 20
-                }
-            }
-        
-            var optionsDonut = {
-                'title': 'Reparto de votos: Personajes Marvel',
-                'width': $('.divGrafica').width() - 10,
-                'height': $('.divGrafica').height() - 30,
-                backgroundColor: '#f1f1f1',
-                is3D: false,
-                pieHole: 0.3,
-                chartArea: {
-                    left: 0,
-                    width: $('.divGrafica').width() - 10
-                },
-                legend: {
-                    maxLines: 1,
-                    textStyle: {
-                        fontSize: 15
-                    }
-                },
-                titleTextStyle: {
-                    fontSize: 20
-                }
-            }
-
-
-                // Instantiate and draw our chart, passing in some options.
+    // Instantiate and draw our chart, passing in some options.
     var chart = new google.visualization.PieChart(document.getElementById('pastelP'));
     chart.draw(data, options);
 
