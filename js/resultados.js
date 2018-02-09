@@ -2,37 +2,52 @@
 var votos = []
 var totalVotos = 0
 
-var info = [
-    ['Memento', 0],
-    ['Terminator 2: El juicio final', 0],
-    ['Origen', 0],
-    ['Mary Poppins', 0],
-    ['Regreso al futuro', 0],
-    ['Cadena perpetua', 0],
-    ['Avatar', 0],
-    ['Ex Machina', 0],
-    ['Mad Max: Furia en la carretera', 0],
-    ['Los goonies', 0]
-]
+var comics = []
+var personajes = []
 
+var votosComics = []
+var votosPersonajes = []
 
-$(document).ready(function (){
-    if (localStorage.getItem("votosPelis") === null) {
+var data;
+var options;
+var optionsDonut;
+
+$(document).ready(function () {
+    if (localStorage.getItem("votosMarvel") === null) {
 
     }
     else {
-        votos = JSON.parse(localStorage.getItem("votosPelis"))
+        votos = JSON.parse(localStorage.getItem("votosMarvel"))
     }
 
-    prueba1 = info[2][0]
-    prueba2 = info[2][1]
-    prueba3 = votos[0].pelicula
+
 
     for (let j = 0; j < votos.length; j++) {
-        for (var i = 0; i < info.length; i++) {
-            if (info[i][0] == votos[j].pelicula) {
-                info[i][1] = info[i][1] + 1
-                totalVotos++
+        existeComic = false
+        if (votos[j].comic != null) {
+            for (let k = 0; k < comics.length; k++) {
+                if (comics[k] == votos[j].comic) {
+                    votosComics[k] = votosComics[k] + 1
+                    existe = true
+                }
+            }
+            if (!existeComic) {
+                comics.push(votos[j].comic)
+                votosComics.push(1)
+            }
+        }
+
+        existePersonaje = false
+        if (votos[j].personaje != null) {
+            for (let k = 0; k < personajes.length; k++) {
+                if (personajes[k] == votos[j].personaje) {
+                    votosPersonajes[k] = votosPersonajes[k] + 1
+                    existe = true
+                }
+            }
+            if (!existePersonaje) {
+                personajes.push(votos[j].personaje)
+                votosPersonajes.push(1)
             }
         }
     }
@@ -48,7 +63,6 @@ $(document).ready(function (){
         }
     })
     graficaPastel()
-    crearAriaLabels()
 })
 
 
@@ -61,39 +75,72 @@ google.charts.setOnLoadCallback(drawChart);
 // Callback that creates and populates a data table,
 // instantiates the pie chart, passes in the data and draws it.
 function drawChart() {
+    arrayComics = []
+    for (let i = 0; i < comics.length; i++) {
+        subarray = [comics[i], votosComics[i]]
+        arrayComics.push(subarray)
+    }
 
-    // Create the data table.
-    var data = new google.visualization.DataTable();
-    data.addColumn('string', 'Película');
-    data.addColumn('number', 'Votos');
-    data.addRows(info);
-
-    // Set chart options
-    var options = {
-        'title': 'Reparto de votos MovieRate',
-        'width': $('.divGrafica').width() - 10,
-        'height': $('.divGrafica').height() - 30,
-        backgroundColor: '#f1f1f1',
-        is3D: true,
-        vAxis: { textPosition: 'in' },
-        chartArea: {
-            left: 0,
-            width: $('.divGrafica').width() - 10
-        },
-        legend: {
-            maxLines: 1,
-            textStyle: {
-                fontSize: 15
-            }
-        },
-        titleTextStyle: {
-            fontSize: 20
-        }
+    arrayPersonajes = []
+    for (let i = 0; i < personajes.length; i++) {
+        subarray = [compersonajesics[i], votosPersonajes[i]]
+        arrayPersonajes.push(subarray)
     }
 
     $('#pastel').show()
     $('#columna').show()
     $('#donut').show()
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Comic');
+        data.addColumn('number', 'Votos');
+        data.addRows(arrayComics);
+    
+        // Set chart options
+        var options = {
+            'title': 'Reparto de votos: Comics Marvel',
+            'width': $('.divGrafica').width() - 10,
+            'height': $('.divGrafica').height() - 30,
+            backgroundColor: '#f1f1f1',
+            is3D: true,
+            vAxis: { textPosition: 'in' },
+            chartArea: {
+                left: 0,
+                width: $('.divGrafica').width() - 10
+            },
+            legend: {
+                maxLines: 1,
+                textStyle: {
+                    fontSize: 15
+                }
+            },
+            titleTextStyle: {
+                fontSize: 20
+            }
+        }
+    
+        var optionsDonut = {
+            'title': 'Reparto de votos: Comics Marvel',
+            'width': $('.divGrafica').width() - 10,
+            'height': $('.divGrafica').height() - 30,
+            backgroundColor: '#f1f1f1',
+            is3D: false,
+            pieHole: 0.3,
+            chartArea: {
+                left: 0,
+                width: $('.divGrafica').width() - 10
+            },
+            legend: {
+                maxLines: 1,
+                textStyle: {
+                    fontSize: 15
+                }
+            },
+            titleTextStyle: {
+                fontSize: 20
+            }
+        }
 
     // Instantiate and draw our chart, passing in some options.
     var chart = new google.visualization.PieChart(document.getElementById('pastel'));
@@ -102,30 +149,14 @@ function drawChart() {
     var chart = new google.visualization.BarChart(document.getElementById('columna'));
     chart.draw(data, options);
 
-    var optionsDonut = {
-        'title': 'Reparto de votos MovieRate',
-        'width': $('.divGrafica').width() - 10,
-        'height': $('.divGrafica').height() - 30,
-        backgroundColor: '#f1f1f1',
-        is3D: false,
-        pieHole: 0.3,
-        chartArea: {
-            left: 0,
-            width: $('.divGrafica').width() - 10
-        },
-        legend: {
-            maxLines: 1,
-            textStyle: {
-                fontSize: 15
-            }
-        },
-        titleTextStyle: {
-            fontSize: 20
-        }
-    }
-
     var chart = new google.visualization.PieChart(document.getElementById('donut'));
     chart.draw(data, optionsDonut);
+
+
+
+    setDataOptionsPersonaje()
+
+
 
     $('#columna').hide()
     $('#donut').hide()
@@ -172,17 +203,120 @@ function irAtras() {
     window.location.href = 'index.html'
 }
 
-function crearAriaLabels() {
-    var aria = ''
-    for (let i = 0; i < info.length; i++) {
-        if (info[i][1] > 0) {
-            if (info[i][1] == 1)
-                aria += info[i][0] + ' tiene ' + info[i][1] + ' voto de ' + totalVotos + '. '
-            else
-                aria += info[i][0] + ' tiene ' + info[i][1] + ' votos de ' + totalVotos + '. '
+
+function setDataOptionsComic(){
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Comic');
+        data.addColumn('number', 'Votos');
+        data.addRows(arrayComics);
+    
+        // Set chart options
+        var options = {
+            'title': 'Reparto de votos: Comics Marvel',
+            'width': $('.divGrafica').width() - 10,
+            'height': $('.divGrafica').height() - 30,
+            backgroundColor: '#f1f1f1',
+            is3D: true,
+            vAxis: { textPosition: 'in' },
+            chartArea: {
+                left: 0,
+                width: $('.divGrafica').width() - 10
+            },
+            legend: {
+                maxLines: 1,
+                textStyle: {
+                    fontSize: 15
+                }
+            },
+            titleTextStyle: {
+                fontSize: 20
+            }
         }
-    }
-    $('#pastel').attr('aria-label', aria)
-    $('#columna').attr('aria-label', aria)
-    $('#donut').attr('aria-label', aria)
+    
+        var optionsDonut = {
+            'title': 'Reparto de votos: Comics Marvel',
+            'width': $('.divGrafica').width() - 10,
+            'height': $('.divGrafica').height() - 30,
+            backgroundColor: '#f1f1f1',
+            is3D: false,
+            pieHole: 0.3,
+            chartArea: {
+                left: 0,
+                width: $('.divGrafica').width() - 10
+            },
+            legend: {
+                maxLines: 1,
+                textStyle: {
+                    fontSize: 15
+                }
+            },
+            titleTextStyle: {
+                fontSize: 20
+            }
+        }
+}
+
+function setDataOptionsPersonaje(){
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Personaje');
+            data.addColumn('number', 'Votos');
+            data.addRows(arrayPersonajes);
+        
+            // Set chart options
+            var options = {
+                'title': 'Reparto de votos: Personajes Marvel',
+                'width': $('.divGrafica').width() - 10,
+                'height': $('.divGrafica').height() - 30,
+                backgroundColor: '#f1f1f1',
+                is3D: true,
+                vAxis: { textPosition: 'in' },
+                chartArea: {
+                    left: 0,
+                    width: $('.divGrafica').width() - 10
+                },
+                legend: {
+                    maxLines: 1,
+                    textStyle: {
+                        fontSize: 15
+                    }
+                },
+                titleTextStyle: {
+                    fontSize: 20
+                }
+            }
+        
+            var optionsDonut = {
+                'title': 'Reparto de votos: Personajes Marvel',
+                'width': $('.divGrafica').width() - 10,
+                'height': $('.divGrafica').height() - 30,
+                backgroundColor: '#f1f1f1',
+                is3D: false,
+                pieHole: 0.3,
+                chartArea: {
+                    left: 0,
+                    width: $('.divGrafica').width() - 10
+                },
+                legend: {
+                    maxLines: 1,
+                    textStyle: {
+                        fontSize: 15
+                    }
+                },
+                titleTextStyle: {
+                    fontSize: 20
+                }
+            }
+
+
+                // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.PieChart(document.getElementById('pastelP'));
+    chart.draw(data, options);
+
+    var chart = new google.visualization.BarChart(document.getElementById('columnaP'));
+    chart.draw(data, options);
+
+    var chart = new google.visualization.PieChart(document.getElementById('donutP'));
+    chart.draw(data, optionsDonut);
 }

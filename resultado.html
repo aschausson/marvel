@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <link rel="stylesheet" href="css/peliculas.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <h1 tabindex="0" id="tituloResultado" aria-level=1>Resultado de Votaciones</h1>
+	<select>
+  <option value="comics">COMICS</option>
+  <option value="personajes">PERSONAJES</option>
+</select>
+
+<div id="divComics">
+    <div id="divBotones">
+        <button class="botonesActivo" id="botonTarta">TARTA</button>
+        <button class="botonesInactivo" id="botonColumna">COLUMNA</button>
+        <button class="botonesInactivo" id="botonDonut">DONUT</button>
+    </div>
+
+    <div class="divGrafica" id="pastel"></div>
+    <div class="divGraficaP" id="pastelP"></div>
+    
+    <div class="divGrafica" id="columna"></div>
+    <div class="divGraficaP" id="columnaP"></div>
+
+    <div class="divGrafica" id="donut"></div>
+    <div class="divGraficaP" id="donutP"></div>
+    <img class="botonAtras" src="data/img/back.png" alt="" id="atrasResultado">
+</div>
+
+<!--
+<div id="divPersonajes">
+    <div id="divBotonesP">
+        <button class="botonesActivo" id="botonTartaP">TARTA</button>
+        <button class="botonesInactivo" id="botonColumnaP">COLUMNA</button>
+        <button class="botonesInactivo" id="botonDonutP">DONUT</button>
+    </div>
+
+    <div class="divGrafica" id="pastelP"></div>
+    <div class="divGrafica" id="columnaP"></div>
+    <div class="divGrafica" id="donutP"></div>
+
+    <img class="botonAtras" src="data/img/back.png" alt="" id="atrasResultadoP">
+</div>
+-->
+    <script src="js/resultados.js"></script>
+</body>
+
+</html>
