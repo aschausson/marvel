@@ -188,7 +188,7 @@ function leePersonajes(filtro) {
 function muestraComic(comic) {
     var descripcionCorta = comic.description.substring(0, 60)
     var pathHttp = comic.thumbnail.path
-    var pathHttps = pathHttps.replace('http', 'https')
+    var pathHttps = pathHttp.replace('http', 'https')
     $('#contenedor').append('<div id="' + comic.id + '" class="comicPequeCont"><img src="' + pathHttps + '/' + 'portrait_medium.' + comic.thumbnail.extension + '"><h2>' + comic.title + '</h2><p>' + descripcionCorta + '...</p></div>')
 }
 
@@ -198,7 +198,7 @@ function muestraComic(comic) {
  */
 function muestraPersonaje(personaje) {
     var pathHttp = personaje.thumbnail.path
-    var pathHttps = pathHttps.replace('http', 'https')
+    var pathHttps = pathHttp.replace('http', 'https')
     $('#contenedorPersonajes').append('<div id="' + personaje.id + '" class="personajePequeCont"><img src="' + pathHttps + '/' + 'portrait_medium.' + personaje.thumbnail.extension + '"><h2>' + personaje.name + '</h2></div>')
 }
 
