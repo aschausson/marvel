@@ -187,7 +187,8 @@ function leePersonajes(filtro) {
  */
 function muestraComic(comic) {
     var descripcionCorta = comic.description.substring(0, 60)
-    $('#contenedor').append('<div id="' + comic.id + '" class="comicPequeCont"><img src="' + comic.thumbnail.path + '/' + 'portrait_medium.' + comic.thumbnail.extension + '"><h2>' + comic.title + '</h2><p>' + descripcionCorta + '...</p></div>')
+    var path = comic.thumbnail.path.str.replace('http', 'https')
+    $('#contenedor').append('<div id="' + comic.id + '" class="comicPequeCont"><img src="' + path + '/' + 'portrait_medium.' + comic.thumbnail.extension + '"><h2>' + comic.title + '</h2><p>' + descripcionCorta + '...</p></div>')
 }
 
 /**
@@ -195,7 +196,8 @@ function muestraComic(comic) {
  * @param {*} personaje 
  */
 function muestraPersonaje(personaje) {
-    $('#contenedorPersonajes').append('<div id="' + personaje.id + '" class="personajePequeCont"><img src="' + personaje.thumbnail.path + '/' + 'portrait_medium.' + personaje.thumbnail.extension + '"><h2>' + personaje.name + '</h2></div>')
+    var path = personaje.thumbnail.path.str.replace('http', 'https')
+    $('#contenedorPersonajes').append('<div id="' + personaje.id + '" class="personajePequeCont"><img src="' + path + '/' + 'portrait_medium.' + personaje.thumbnail.extension + '"><h2>' + personaje.name + '</h2></div>')
 }
 
 /**
@@ -366,7 +368,7 @@ function datosComic(filtro, year1, year2) {
     else if (year1 != '' && year2 == '') {
         filtroYear = '&dateRange=' + year1 + '-01-01%2C' + (new Date()).getFullYear() + '-12-31'
     }
-    
+
     var url = 'https://gateway.marvel.com:443/v1/public/comics?format=' + formato + '&formatType=' + tipoFormato + '&noVariants=' + sinVariantes + filtroNombre + '&orderBy=' + ordenado + filtroYear + '&limit=' + limite + '&apikey=' + pubKey
     return $.get(url);
 }
