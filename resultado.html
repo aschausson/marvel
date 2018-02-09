@@ -16,32 +16,30 @@
 
 <body>
     <h1 tabindex="0" id="tituloResultado" aria-level=1>Resultado de Votaciones</h1>
-	<select>
+	<select id="selectModo">
   <option value="comics">COMICS</option>
   <option value="personajes">PERSONAJES</option>
 </select>
 
 <div id="divComics">
-    <div id="divBotones">
+    <div class="divBotones">
         <button class="botonesActivo" id="botonTarta">TARTA</button>
         <button class="botonesInactivo" id="botonColumna">COLUMNA</button>
         <button class="botonesInactivo" id="botonDonut">DONUT</button>
     </div>
 
     <div class="divGrafica" id="pastel"></div>
-    <div class="divGraficaP" id="pastelP"></div>
     
     <div class="divGrafica" id="columna"></div>
-    <div class="divGraficaP" id="columnaP"></div>
 
     <div class="divGrafica" id="donut"></div>
-    <div class="divGraficaP" id="donutP"></div>
+
     <img class="botonAtras" src="data/img/back.png" alt="" id="atrasResultado">
 </div>
 
-<!--
+
 <div id="divPersonajes">
-    <div id="divBotonesP">
+    <div class="divBotones">
         <button class="botonesActivo" id="botonTartaP">TARTA</button>
         <button class="botonesInactivo" id="botonColumnaP">COLUMNA</button>
         <button class="botonesInactivo" id="botonDonutP">DONUT</button>
@@ -53,7 +51,7 @@
 
     <img class="botonAtras" src="data/img/back.png" alt="" id="atrasResultadoP">
 </div>
--->
+
     <script src="js/resultados.js"></script>
 </body>
 

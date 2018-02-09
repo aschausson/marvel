@@ -13,6 +13,21 @@ var options;
 var optionsDonut;
 
 $(document).ready(function () {
+	$('#divPersonajes').hide()
+	
+	$('#selectModo').change(function(){
+		$( "select option:selected").each(function() {
+			if ($(this).val() == "comics"){
+				$('#divComics').show()
+				$('#divPersonajes').hide()
+			}
+			if ($(this).val() == "personajes"){
+				$('#divPersonajes').show()
+				$('#divComics').hide()	
+			}
+		})
+	})	
+	
     if (localStorage.getItem("votosMarvel") === null) {
 
     }
@@ -52,17 +67,21 @@ $(document).ready(function () {
         }
     }
 
-    $('#botonTarta').click(graficaPastel)
-    $('#botonColumna').click(graficaColumna)
-    $('#botonDonut').click(graficaDonut)
+    $('#botonTarta').click(function(){graficaPastel('')})
+    $('#botonColumna').click(function(){graficaColumna('')})
+    $('#botonDonut').click(function(){graficaDonut('')})
+	
+	$('#botonTartaP').click(function(){graficaPastel('P')})
+    $('#botonColumnaP').click(function(){graficaColumna('P')})
+    $('#botonDonutP').click(function(){graficaDonut('P')})
 
-    $('#atrasResultado').click(irAtras)
-    $('#atrasResultado').keypress(function (e) {
+    $('#atrasResultado, #atrasResultadoP').click(irAtras)
+    $('#atrasResultado, #atrasResultadoP').keypress(function (e) {
         if (e.which == 13) {//enter
             irAtras()
         }
     })
-    graficaPastel()
+    graficaPastel('')
 })
 
 
@@ -167,36 +186,36 @@ function drawChart() {
 
 
 
-function graficaPastel() {
-    $('#botonTarta').removeClass('botonesInactivo').addClass('botonesActivo')
-    $('#botonColumna').removeClass('botonesActivo').addClass('botonesInactivo')
-    $('#botonDonut').removeClass('botonesActivo').addClass('botonesInactivo')
+function graficaPastel(sufix) {
+    $('#botonTarta'+sufix).removeClass('botonesInactivo').addClass('botonesActivo')
+    $('#botonColumna'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+    $('#botonDonut'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
 
-    $('#pastel').show()
-    $('#columna').hide()
-    $('#donut').hide()
+    $('#pastel'+sufix).show()
+    $('#columna'+sufix).hide()
+    $('#donut'+sufix).hide()
 }
 
 
-function graficaColumna() {
-    $('#botonTarta').removeClass('botonesActivo').addClass('botonesInactivo')
-    $('#botonColumna').removeClass('botonesInactivo').addClass('botonesActivo')
-    $('#botonDonut').removeClass('botonesActivo').addClass('botonesInactivo')
+function graficaColumna(sufix) {
+    $('#botonTarta'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+    $('#botonColumna'+sufix).removeClass('botonesInactivo').addClass('botonesActivo')
+    $('#botonDonut'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
 
-    $('#pastel').hide()
-    $('#columna').show()
-    $('#donut').hide()
+    $('#pastel'+sufix).hide()
+    $('#columna'+sufix).show()
+    $('#donut'+sufix).hide()
 }
 
 
-function graficaDonut() {
-    $('#botonTarta').removeClass('botonesActivo').addClass('botonesInactivo')
-    $('#botonColumna').removeClass('botonesActivo').addClass('botonesInactivo')
-    $('#botonDonut').removeClass('botonesInactivo').addClass('botonesActivo')
+function graficaDonut(sufix) {
+    $('#botonTarta'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+    $('#botonColumna'+sufix).removeClass('botonesActivo').addClass('botonesInactivo')
+    $('#botonDonut'+sufix).removeClass('botonesInactivo').addClass('botonesActivo')
 
-    $('#pastel').hide()
-    $('#columna').hide()
-    $('#donut').show()
+    $('#pastel'+sufix).hide()
+    $('#columna'+sufix).hide()
+    $('#donut'+sufix).show()
 }
 
 function irAtras() {

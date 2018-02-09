@@ -1,4 +1,3 @@
-//var crypto = require('crypto');
 
 
 function Voto(usuario, email, telefono) {
@@ -535,7 +534,6 @@ function guardarVotoComic() {
         }
         
     }
-    //document.formulario.submit();
     return false
 }
 
@@ -548,7 +546,7 @@ function guardarVotoPersonaje() {
     if (localStorage.getItem("votosMarvel") === null) {
         votos.push(voto)
         localStorage.setItem("votosMarvel", JSON.stringify(votos))
-        //voto registrado
+        toastr.success('', 'Voto registrado')
     }
     else {
         votos = JSON.parse(localStorage.getItem("votosMarvel"))
@@ -573,7 +571,6 @@ function guardarVotoPersonaje() {
             toastr.success('', 'Voto registrado')
         }
     }
-    //document.formulario.submit();
     return false
 }
 
